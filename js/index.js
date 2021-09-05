@@ -1,3 +1,26 @@
+/**login */
+const login = async (username, password) => {
+  const data = await fetch("http://localhost:4550/api/login", {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "POST",
+    body: JSON.stringify({ username: username, password: password }),
+  });
+  return data;
+};
+/**authorization */
+const auth = async () => {
+  const fetched = await fetch("http://localhost:4550/api/", {
+    method: "GET",
+    headers: {
+      Authorization: `${sessionStorage.getItem("MyUniqueToken")}`,
+      "Content-Type": "application/json",
+    },
+  });
+  return fetched;
+};
+/**authorization */
 if (document.body.classList.contains("login")) {
   document.querySelector("#send").addEventListener("click", function (e) {
     e.preventDefault();
@@ -50,16 +73,19 @@ if (document.body.classList.contains("scanner")) {
         body: JSON.stringify({
           n_pedido: document
             .querySelector("#label-barcode")
-            .value.split("0")[1],
+            .value.slice(
+              1,
+              document.querySelector("#label-barcode").value.length
+            ),
         }),
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `${sessionStorage.getItem("MyUniqueToken")}`,
         },
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
           PrintData(data, document.querySelector("#data"));
         })
         .catch((error) => console.warn(error.message));
@@ -84,18 +110,23 @@ if (document.body.classList.contains("scanner")) {
       }
     }
     /**funcion para imprimir la data */
-  }else{
-    window.location.replace('/views/login.html')
+    /**authorization */
+    auth()
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        if (data.error) window.location.replace("/views/login.html");
+      })
+      .catch((error) => console.log(error.message));
+    /**authorization */
+    /**logout */
+    document.querySelector('#logout').addEventListener('click',function(e){
+      e.preventDefault()
+      sessionStorage.removeItem('MyUniqueToken')
+      window.location.replace('/views/login.html')
+    })
+    /**logout */
+  } else {
+    window.location.replace("/views/login.html");
   }
 }
-/**login */
-const login = async (username, password) => {
-  const data = await fetch("http://localhost:4550/api/login", {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    method: "POST",
-    body: JSON.stringify({ username: username, password: password }),
-  });
-  return data;
-};
