@@ -1,0 +1,43 @@
+
+*{
+    font-family: 'Helvetica';
+    background-color:chocolate;
+}
+body.login form,
+body.scanner form,
+body.login,body.scanner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+body.login form,
+body.login form label,
+body.login form input,
+body.login form button,
+body.scanner form label,
+body.scanner form input,
+body.scanner form button,
+body.scanner form,
+#data , #data p, #data h4  {
+    background-color: white;
+}
+
+body.login form,
+body.scanner form{
+    padding:2.5em
+}
+
+body.login form label {
+  font-size: 15px;
+  padding: 1em;
+  font-weight:bold;
+  
+}
+
+body.login form input,
+body.scanner form input,
+body.scanner form button {
+  margin: 0.5em auto;
+}

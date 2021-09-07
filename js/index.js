@@ -29,9 +29,13 @@ if (document.body.classList.contains("login")) {
     login(username, password)
       .then((response) => response.json())
       .then((data) => {
-        sessionStorage.setItem("MyUniqueToken", JSON.stringify(data["token"]));
-        if (sessionStorage.getItem("MyUniqueToken")) {
-          window.location.replace("/views/scan.html");
+        if(data.token){
+          sessionStorage.setItem("MyUniqueToken", JSON.stringify(data["token"]));
+          if (sessionStorage.getItem("MyUniqueToken")) {
+            window.location.replace("/views/scan.html");
+          }
+        }else{
+          alert('invalid credentials')
         }
       })
       .catch((error) => console.log(error));
@@ -68,6 +72,7 @@ if (document.body.classList.contains("scanner")) {
 
     /**traer data de la api */
     document.querySelector("#search").addEventListener("click", function (e) {
+      e.preventDefault()
       document.querySelector("#data").innerHTML = `<h4> - Loading...</h4>`;
       fetch("http://localhost:4550/api/buscar_pedido", {
         body: JSON.stringify({
@@ -115,18 +120,20 @@ if (document.body.classList.contains("scanner")) {
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-        if (data.error) window.location.replace("/views/login.html");
+        if (data.error) window.location.replace("/index.html");
       })
-      .catch((error) => console.log(error.message));
+      .catch((error) => {
+        console.log(error)
+      });
     /**authorization */
     /**logout */
     document.querySelector('#logout').addEventListener('click',function(e){
       e.preventDefault()
       sessionStorage.removeItem('MyUniqueToken')
-      window.location.replace('/views/login.html')
+      window.location.replace('/index.html')
     })
     /**logout */
   } else {
-    window.location.replace("/views/login.html");
+    window.location.replace("/index.html");
   }
 }
