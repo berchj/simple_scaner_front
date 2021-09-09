@@ -3,6 +3,9 @@
     font-family: 'Helvetica';
     background-color:chocolate;
 }
+h1,h3,h5{
+  color: white;
+}
 body.login form,
 body.scanner form,
 body.login,body.scanner {
@@ -40,4 +43,17 @@ body.login form input,
 body.scanner form input,
 body.scanner form button {
   margin: 0.5em auto;
+}
+#data table,
+#data table tbody,
+#data table thead,
+#data table td,
+#data table th{
+  background-color:#fff;
+  text-align: center;
+  font-size: 15px;
+  border:1px solid black;
+}
+#data table input{
+  width: 75%;
 }
