@@ -1,52 +1,55 @@
 /**funcion para cargar las ordenes */
 const load = async () => {
-  const data = await fetch('http://localhost:4550/api/orders',{
+  const data = await fetch("http://localhost:4550/api/orders", {
     method: "GET",
     headers: {
       Authorization: `${sessionStorage.getItem("MyUniqueToken")}`,
       "Content-Type": "application/json",
     },
-  })
+  });
   return data;
-}
+};
 /**funcion para cargar las ordenes */
 /**imprimir ordenes */
-const printOrder = response => {
-  if(response.data){
-    let orders = response.data
+const printOrder = (response) => {
+  if (response.data) {
+    let orders = response.data;
     for (let i = 0; i < orders.length; i++) {
-      let tr = document.createElement('tr')
+      let tr = document.createElement("tr");
       tr.innerHTML = `
                   <td>
-                   ${orders[i]['fecha_hora']}
+                   ${orders[i]["fecha_hora"]}
                   </td>    
                   <td>
-                   ${orders[i]['col_nombre_scan']}
+                   ${orders[i]["col_nombre_scan"]}
+                  </td>
+                  <td>
+                   ${orders[i]["num_pedido"]}
                   </td>    
                   <td>
-                   ${orders[i]['consol']}
+                   ${orders[i]["consol"]}
                   </td>    
                   <td>
-                   ${orders[i]['transporte']}
+                   ${orders[i]["transporte"]}
                   </td>    
                   <td>
-                   ${orders[i]['num_guia']}
+                   ${orders[i]["num_guia"]}
                   </td>    
                   <td>
-                   ${orders[i]['peso']}
+                   ${orders[i]["peso"]}
                   </td>    
                   <td>
-                   ${orders[i]['bulto']}
+                   ${orders[i]["bulto"]}
                   </td>    
                   <td>
-                   ${orders[i]['usuario']}
+                   ${orders[i]["usuario"]}
                   </td>    
                 
-      `
-      document.querySelector('table tbody').appendChild(tr)
+      `;
+      document.querySelector("table tbody").appendChild(tr);
     }
   }
-}
+};
 /**imprimir ordenes */
 /**funcion para guardar la data */
 const save = async () => {
@@ -64,8 +67,8 @@ const save = async () => {
       transporte: document.querySelector("#transporte").value,
       num_guia: document.querySelector("#num_guia").value,
       peso: document.querySelector("#peso").value,
-      bulto: document.querySelector('#bulto').value,
-      usuario: sessionStorage.getItem('user'),
+      bulto: document.querySelector("#bulto").value,
+      usuario: sessionStorage.getItem("user"),
     }),
   });
   return data;
@@ -147,7 +150,9 @@ function PrintData(response, element) {
                <input id="bulto" type="text" value="B-1"> 
               </td>
               <td>
-                <input id ="usuario" type="text" disabled value="${sessionStorage.getItem("user")}"> 
+                <input id ="usuario" type="text" disabled value="${sessionStorage.getItem(
+                  "user"
+                )}"> 
               </td>
           </tr>
       </tbody>
@@ -236,15 +241,24 @@ if (document.body.classList.contains("scanner")) {
         .then((data) => {
           console.log(data);
           PrintData(data, document.querySelector("#data"));
-          document
-            .querySelector("#save")
-            .addEventListener("click", function (e) {
-              e.preventDefault();
-              save()
-                .then((response) => response.json())
-                .then((data) => console.log(data))
-                .catch((error) => console.error(error));
-            });
+
+          if (document.querySelector("#save")) {
+            document
+              .querySelector("#save")
+              .addEventListener("click", function (e) {
+                e.preventDefault();
+                save()
+                  .then((response) => response.json())
+                  .then((data) => {
+                    if (data.message) {
+                      if (document.querySelector("#data"))
+                        document.querySelector("#data").innerHTML +=
+                          data.message;
+                    }
+                  })
+                  .catch((error) => console.error(error));
+              });
+          }
         })
         .catch((error) => console.warn(error.message));
     });
@@ -272,9 +286,11 @@ if (document.body.classList.contains("scanner")) {
     window.location.replace("/index.html");
   }
 }
-if(document.body.classList.contains('orders')){
+if (document.body.classList.contains("orders")) {
   load()
-    .then(response => response.json())
-    .then(data => printOrder(data))
-    .then(error => console.error(error))
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      printOrder(data);
+    });
 }

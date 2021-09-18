@@ -6,9 +6,17 @@
 h1,h3,h5{
   color: white;
 }
+a{
+  font-weight: bold;
+  font-size: 15px;
+  color: white;
+  padding: 0.5em;
+}
 body.login form,
 body.scanner form,
-body.login,body.scanner {
+body.login,
+body.scanner,
+body.orders  {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -48,7 +56,13 @@ body.scanner form button {
 #data table tbody,
 #data table thead,
 #data table td,
-#data table th{
+#data table th,
+body.orders  table,
+body.orders  table tbody,
+body.orders  table thead,
+body.orders  table td,
+body.orders  table th
+{
   background-color:#fff;
   text-align: center;
   font-size: 15px;
